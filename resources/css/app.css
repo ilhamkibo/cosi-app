@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Sora:wght@100..800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.swiper-wrapper {
+    max-width: 700px !important;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.9
+    ) !important; /* Warna putih transparan */
+    border-radius: 50% !important; /* Membuat lingkaran */
+    width: 40px !important; /* Lebar tombol */
+    height: 40px !important; /* Tinggi tombol */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important; /* Bayangan */
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    content: "" !important; /* Hapus ikon default */
+    display: inline-block !important;
+    width: 0;
+    height: 0;
+    border-style: solid !important;
+}
+
+.swiper-button-prev::after {
+    border-width: 6px 8px 6px 0 !important;
+    border-color: transparent #333 transparent transparent !important; /* Panah kiri */
+}
+
+.swiper-button-next::after {
+    border-width: 6px 0 6px 8px !important;
+    border-color: transparent transparent transparent #333 !important; /* Panah kanan */
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    background-color: rgba(255, 255, 255, 1); /* Perubahan warna saat hover */
+    transform: scale(1.1); /* Animasi memperbesar */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Ketika tombol fontSmall aktif */
+trix-toolbar
+    .trix-button-group
+    button[data-trix-attribute="fontSmall"].trix-active {
+    background-color: #007bff; /* Warna latar belakang saat aktif */
+    color: white; /* Warna teks saat aktif */
+}
+
+/* Ketika tombol fontMedium aktif */
+trix-toolbar
+    .trix-button-group
+    button[data-trix-attribute="fontMedium"].trix-active {
+    background-color: #007bff; /* Warna latar belakang saat aktif */
+    color: white; /* Warna teks saat aktif */
+}
+
+/* Ketika tombol fontLarge aktif */
+trix-toolbar
+    .trix-button-group
+    button[data-trix-attribute="fontLarge"].trix-active {
+    background-color: #007bff; /* Warna latar belakang saat aktif */
+    color: white; /* Warna teks saat aktif */
+}
+
+/* Ketika tombol fontLarge aktif */
+trix-toolbar
+    .trix-button-group
+    button[data-trix-attribute="fontExtraLarge"].trix-active {
+    background-color: #007bff; /* Warna latar belakang saat aktif */
+    color: white; /* Warna teks saat aktif */
+}
+
+/* Ketika tombol fontLarge aktif */
+trix-toolbar
+    .trix-button-group
+    button[data-trix-attribute="font2xl"].trix-active {
+    background-color: #007bff; /* Warna latar belakang saat aktif */
+    color: white; /* Warna teks saat aktif */
+}
+
+/* Ketika tombol fontLarge aktif */
+trix-toolbar
+    .trix-button-group
+    button[data-trix-attribute="font3xl"].trix-active {
+    background-color: #007bff; /* Warna latar belakang saat aktif */
+    color: white; /* Warna teks saat aktif */
+}
