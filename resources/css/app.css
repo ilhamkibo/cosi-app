@@ -121,3 +121,23 @@ trix-toolbar
     background-color: #007bff; /* Warna latar belakang saat aktif */
     color: white; /* Warna teks saat aktif */
 }
+
+.swiper-2 {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-2 .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* 
+.swiper-2 .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+} */

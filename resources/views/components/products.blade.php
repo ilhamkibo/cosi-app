@@ -38,14 +38,52 @@
             <div class="xl:px-0 px-5 mt-5 mb-2">
                 <h1 class="text-3xl">Some <span class="font-fraunces">Collections</span></h1>
             </div>
-            <div class="flex overflow-x-auto h-96 gap-2">
+            <div class="swiper-2 relative mySwiper overflow-x-hidden">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="flex h-96">
+                            <img src="{{ asset('images/section-1.png') }}" alt=""
+                                class="object-contain rounded-md">
+                        </div>
+
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="flex h-96">
+                            <img src="{{ asset('images/section-2.png') }}" alt=""
+                                class="object-contain rounded-md">
+                        </div>
+
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="flex h-96">
+                            <img src="{{ asset('images/section-3.png') }}" alt=""
+                                class="object-contain rounded-md">
+                        </div>
+
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="flex h-96">
+                            <img src="{{ asset('images/section-4.png') }}" alt=""
+                                class="object-contain rounded-md">
+                        </div>
+
+                    </div>
+                </div>
+                <div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            {{-- <div class="flex overflow-x-auto h-96 gap-2">
                 <img src="{{ asset('images/section-5.jpg') }}" alt="" class="object-contain">
                 <img src="{{ asset('images/section-1.png') }}" alt="" class="object-contain">
                 <img src="{{ asset('images/section-2.png') }}" alt="" class="object-contain">
                 <img src="{{ asset('images/section-3.png') }}" alt="" class="object-contain">
                 <img src="{{ asset('images/section-4.png') }}" alt="" class="object-contain">
-            </div>
+            </div> --}}
         </div>
     </section>
-    @include('components.layouts.footer')
+    <div>
+        <hr class="max-w-6xl mx-auto my-5 border-5 border-black">
+        @include('components.layouts.footer')
+    </div>
 </x-layouts.main-app>

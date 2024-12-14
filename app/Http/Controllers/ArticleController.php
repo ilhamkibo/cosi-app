@@ -26,7 +26,7 @@ class ArticleController extends Controller
             'https://cms.ptgis.id/wp-json/wp/v2/posts',
             [
                 'query' => [
-                    'per_page' => 3,
+                    'per_page' => 4,
                     'categories' => $categories,
                     'tags' => $tags,
                     'page' => $page
