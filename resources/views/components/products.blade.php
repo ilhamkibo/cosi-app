@@ -36,7 +36,7 @@
 
             </div>
             <div class="xl:px-0 px-5 mt-5 mb-2">
-                <h1 class="text-3xl">Some <span class="font-fraunces">Collections</span></h1>
+                <h1 class="text-3xl">Our <span class="font-fraunces">Collections</span></h1>
             </div>
             <div class="swiper-2 relative mySwiper overflow-x-hidden">
                 <div class="swiper-wrapper">

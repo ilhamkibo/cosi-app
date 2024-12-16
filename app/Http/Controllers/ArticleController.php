@@ -14,43 +14,46 @@ class ArticleController extends Controller
 
     public function index()
     {
-
         // Buat instance Guzzle
         $client = new Client();
         $page = request('page', 1);
         $categories = request('category');
         $tags = request('tag');
 
-        // Ambil data artikel dari API WordPress
-        $response = $client->get(
-            'https://cms.ptgis.id/wp-json/wp/v2/posts',
-            [
-                'query' => [
-                    'per_page' => 4,
-                    'categories' => $categories,
-                    'tags' => $tags,
-                    'page' => $page
-
+        try {
+            // Ambil data artikel dari API WordPress
+            $response = $client->get(
+                'https://cms.ptgis.id/wp-json/wp/v2/posts',
+                [
+                    'query' => [
+                        'per_page' => 9,
+                        'categories' => $categories,
+                        'tags' => $tags,
+                        'page' => $page
+                    ]
                 ]
-            ]
-        );
+            );
 
-        // Proses pagination
+            $articles = json_decode($response->getBody(), true);
+            $totalArticles = $response->getHeaderLine('X-WP-Total');
+            $totalPages = $response->getHeaderLine('X-WP-TotalPages');
+        } catch (\Exception $e) {
+            // Jika error terjadi, tampilkan halaman kosong
+            return view('components.articles', [
+                'articles' => [],
+                'categories' => [],
+                'tags' => [],
+                'currentPage' => $page,
+                'previousPage' => max(1, $page - 1),
+                'nextPage' => $page + 1,
+                'totalPages' => 0,
+                'totalArticles' => 0,
+                'startPage' => 1,
+                'endPage' => 1
+            ]);
+        }
 
-        // dd($response);
-        $articles = json_decode($response->getBody(), true);
-
-        $currentPage = request()->input('page', 1);
-        $totalArticles = $response->getHeaderLine('X-WP-Total'); // Total artikel
-        $totalPages = $response->getHeaderLine('X-WP-TotalPages'); // Total artikel
-        $previousPage = $currentPage - 1;
-        $nextPage = $currentPage + 1;
-        // Menentukan halaman yang akan ditampilkan di pagination
-        $pagesToShow = 1; // Menampilkan 2 halaman sebelumnya dan 2 halaman berikutnya
-        $startPage = max(1, $currentPage - $pagesToShow); // Halaman mulai
-        $endPage = min($totalPages, $currentPage + $pagesToShow); // Halaman akhir
-
-        // Ambil semua kategori sekaligus
+        // Ambil semua kategori
         $categoriesResponse = $client->get('https://cms.ptgis.id/wp-json/wp/v2/categories');
         $allCategories = json_decode($categoriesResponse->getBody(), true);
         $categoriesMap = [];
@@ -58,15 +61,13 @@ class ArticleController extends Controller
             $categoriesMap[$category['id']] = $category['name'];
         }
 
-        // Ambil semua tag sekaligus
+        // Ambil semua tag
         $tagsResponse = $client->get('https://cms.ptgis.id/wp-json/wp/v2/tags');
         $allTags = json_decode($tagsResponse->getBody(), true);
         $tagsMap = [];
         foreach ($allTags as $tag) {
             $tagsMap[$tag['id']] = $tag['name'];
         }
-
-        // dd($tagsMap, $categoriesMap, $articles);
 
         // Proses setiap artikel
         $processedArticles = array_map(function ($article) use ($client, $categoriesMap, $tagsMap) {
@@ -89,7 +90,6 @@ class ArticleController extends Controller
             // Return data artikel
             return [
                 'title' => $article['title']['rendered'],
-                // 'content' => $article['content']['rendered'],
                 'excerpt' => $article['excerpt']['rendered'],
                 'thumbnail' => $thumbnail,
                 'categories' => $categories,
@@ -99,8 +99,14 @@ class ArticleController extends Controller
             ];
         }, $articles);
 
-        // Debug hasil data yang diproses (hapus ini di production)
-        // dd($processedArticles);
+        // Tentukan pagination
+        $currentPage = $page;
+        $previousPage = max(1, $currentPage - 1);
+        $nextPage = $currentPage + 1;
+        $pagesToShow = 1; // Menampilkan 1 halaman sebelumnya dan berikutnya
+        $startPage = max(1, $currentPage - $pagesToShow);
+        $endPage = min($totalPages, $currentPage + $pagesToShow);
+
         return view('components.articles', [
             'articles' => $processedArticles,
             'categories' => $categoriesMap,
@@ -112,9 +118,9 @@ class ArticleController extends Controller
             'totalArticles' => $totalArticles,
             'startPage' => $startPage,
             'endPage' => $endPage
-            // 'articles' => $articles
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -135,10 +141,63 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        $client = new Client();
+
+        try {
+            // Ambil artikel berdasarkan slug
+            $response = $client->get("https://cms.ptgis.id/wp-json/wp/v2/posts", [
+                'query' => ['slug' => $slug],
+            ]);
+
+            $articles = json_decode($response->getBody(), true);
+
+            if (empty($articles)) {
+                // Jika artikel tidak ditemukan, lempar 404
+                abort(404, 'Artikel tidak ditemukan.');
+            }
+
+            $article = $articles[0]; // Ambil artikel pertama (slug harus unik)
+
+            // Ambil semua tags
+            $tagsResponse = $client->get("https://cms.ptgis.id/wp-json/wp/v2/tags");
+            $tags = json_decode($tagsResponse->getBody(), true);
+
+            // Ambil tag names berdasarkan IDs
+            $article['tags'] = isset($article['tags']) && is_array($article['tags'])
+                ? array_map(fn($id) => $tags[array_search($id, array_column($tags, 'id'))]['name'] ?? null, $article['tags'])
+                : [];
+
+            // Ambil semua kategori
+            $categoriesResponse = $client->get("https://cms.ptgis.id/wp-json/wp/v2/categories");
+            $categories = json_decode($categoriesResponse->getBody(), true);
+
+            // Ambil category names berdasarkan IDs
+            $article['categories'] = isset($article['categories']) && is_array($article['categories'])
+                ? array_map(fn($id) => $categories[array_search($id, array_column($categories, 'id'))]['name'] ?? null, $article['categories'])
+                : [];
+
+            // Ambil thumbnail
+            $article['thumbnail'] = null;
+            if (!empty($article['featured_media'])) {
+                $mediaResponse = $client->get("https://cms.ptgis.id/wp-json/wp/v2/media/{$article['featured_media']}");
+                $media = json_decode($mediaResponse->getBody(), true);
+                $article['thumbnail'] = $media['source_url'] ?? null;
+            }
+
+            // Debugging
+            // dd($article);
+
+            return view('components.article', [
+                'article' => $article
+            ]);
+        } catch (\Exception $e) {
+            // Tangani error
+            abort(404, 'Terjadi kesalahan saat mengambil artikel.');
+        }
     }
+
 
     /**
      * Show the form for editing the specified resource.

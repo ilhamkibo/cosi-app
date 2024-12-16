@@ -29,13 +29,3 @@ Route::resource('admin/products', AdminProductController::class)->names([
     'update' => 'admin.products.update',
     'destroy' => 'admin.products.destroy',
 ]);
-
-Route::resource('admin/articles', AdminArticleController::class)->names([
-    'index' => 'admin.articles.index',
-    'create' => 'admin.articles.create',
-    'store' => 'admin.articles.store',
-    'show' => 'admin.articles.show',
-    'edit' => 'admin.articles.edit',
-    'update' => 'admin.articles.update',
-    'destroy' => 'admin.articles.destroy',
-]);
