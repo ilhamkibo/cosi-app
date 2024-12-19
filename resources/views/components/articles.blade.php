@@ -130,7 +130,7 @@
         </div> --}}
 
         @if (!empty($articles) && isset($articles[0]))
-            <div class="xl:px-0 px-5 my-5 hidden md:grid md:grid-cols-1">
+            {{-- <div class="xl:px-0 px-5 my-5 hidden md:grid md:grid-cols-1">
                 <a href="{{ route('articles.show', $articles[0]['slug']) }}" class="hidden sm:block">
                     <div class="relative flex items-end overflow-hidden hover:scale-[0.995] transition-transform">
                         <!-- Thumbnail Image -->
@@ -138,7 +138,7 @@
                             alt="{{ $articles[0]['title'] }}" class="w-full max-h-[612px] object-cover">
 
                         <!-- Gradient Overlay -->
-                        {{-- <div class="absolute inset-0 bg-gradient-to-t from-blue-75 via-green-75/40 to-transparent"> --}}
+                        <div class="absolute inset-0 bg-gradient-to-t from-blue-75 via-green-75/40 to-transparent">
                         <div class="absolute inset-0 bg-gray-500/20">
                         </div>
 
@@ -179,31 +179,80 @@
                         </div>
                     </div>
                 </a>
+            </div> --}}
+            <div class="xl:px-0 px-5 my-5 hidden md:grid md:grid-cols-2">
+
+                <div class="p-3 bg-white rounded-lg shadow-md shadow-gray-500/50">
+                    <img src="{{ $articles[0]['thumbnail'] ?? asset('images/default-thumbnail.png') }}"
+                        alt="{{ $articles[0]['title'] }}" class="w-full aspect-[3/2] rounded-lg object-cover">
+                </div>
+                <div class="pl-10 flex flex-col gap-2 justify-center">
+                    <h1 class="text-3xl font-medium">{{ $articles[0]['title'] ?? 'Title' }}</h1>
+                    <div class="font-extralight text-sm">
+                        <p class="">{!! \Illuminate\Support\Str::limit($articles[0]['excerpt'], 200, '...') ?? 'Excerpt' !!}</p>
+                    </div>
+                    <a href="{{ route('articles.show', $articles[0]['slug']) }}"
+                        class="font-semibold text-blue-75 hover:scale-105 w-fit flex items-center gap-1 transition-transform duration-300">Read
+                        More <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                            class="w-4 h-4">
+                            <path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414 4.95-4.95z" />
+                        </svg>
+                        {{-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                            <path fill-rule="evenodd"
+                                d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z"
+                                clip-rule="evenodd" />
+                        </svg> --}}
+                    </a>
+                </div>
+            </div>
+
+            <div class="xl:px-0 px-5 mt-10">
+                <h1 class="text-2xl">Our Recent Articles</h1>
+                <h4 class="text-sm text-gray-600">Stay Informed with Our Latest Insights</h4>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 xl:px-0 px-5 my-5" style="grid-auto-rows: 1fr;">
                 @foreach ($articles as $item)
-                    <a href="{{ route('articles.show', $item['slug']) }}"
-                        class="{{ $loop->first ? 'md:hidden' : '' }} ">
-                        <div class="flex w-full flex-col gap-3 rounded-lg hover:scale-[0.995] hover:opacity-90 h-full">
-                            <div class="relative w-full aspect-square">
-                                <img src="{{ $item['thumbnail'] ?? asset('images/default-thumbnail.png') }}"
-                                    alt="{{ $item['title'] }}" class="absolute inset-0 w-full h-full object-cover">
-                            </div>
-                            <div class="flex w-full flex-col flex-grow gap-2">
-                                <p class="font-bold">{!! \Illuminate\Support\Str::limit($item['title'], 60, '...') !!}</p>
+                    <div class="{{ $loop->first ? 'md:hidden' : '' }} flex w-full flex-col gap-3 rounded-lg h-full">
+                        <!-- Gambar Card -->
+                        <div class="relative h-48 w-full">
+                            <img src="{{ $item['thumbnail'] ?? asset('images/default-thumbnail.png') }}"
+                                alt="{{ $item['title'] }}" class="w-full h-full object-cover rounded-lg">
+                        </div>
 
-                                <div class="text-sm md:font-thin flex-grow">
-                                    <p>{!! \Illuminate\Support\Str::limit($item['excerpt'], 200, '...') !!}</p>
-                                </div>
-                                <div class="flex gap-2 text-sm mt-auto">
-                                    <p class="text-green-75">{{ implode(', ', $item['categories']) }}</p>
-                                    <p class="md:font-light">—</p>
-                                    <p class="md:font-light">
-                                        {{ \Carbon\Carbon::parse($item['date'])->translatedFormat('l, j M Y') }}</p>
-                                </div>
+                        <!-- Konten Card -->
+                        <div class="flex w-full flex-col flex-grow gap-2 pb-4">
+                            <!-- Tanggal & Penulis -->
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <p class="text-green-75 font-semibold">{{ $item['categories'][0] ?? 'Nama Penulis' }}
+                                </p>
+                                <p class="text-gray-400">
+                                    {{ \Carbon\Carbon::parse($item['date'])->translatedFormat('d M Y') }}</p>
+                            </div>
+
+                            <!-- Judul -->
+                            <p class="font-bold text-lg text-gray-900 leading-tight">
+                                {!! \Illuminate\Support\Str::limit($item['title'], 60, '...') !!}
+                            </p>
+
+                            <!-- Excerpt -->
+                            <div class="text-sm text-gray-600 line-clamp-2">
+                                <p>{!! \Illuminate\Support\Str::limit($item['excerpt'], 200, '...') !!}</p>
+                            </div>
+
+                            <!-- Link "Read More" -->
+                            <div>
+                                <a href="{{ route('articles.show', $item['slug']) }}"
+                                    class="text-blue-75 font-semibold hover:scale-105 w-fit transition-transform duration-300 ease-in-out flex items-center gap-1 mt-auto">
+                                    <span>Read More</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                                        class="w-4 h-4">
+                                        <path
+                                            d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414 4.95-4.95z" />
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 @endforeach
             </div>
 

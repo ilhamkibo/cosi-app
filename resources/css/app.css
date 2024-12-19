@@ -74,6 +74,14 @@
     border-radius: 0.375rem;
 }
 
+.clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Ketika tombol fontSmall aktif */
 trix-toolbar
     .trix-button-group
