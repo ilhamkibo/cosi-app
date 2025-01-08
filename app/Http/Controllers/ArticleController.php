@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class ArticleController extends Controller
 {
@@ -23,7 +25,7 @@ class ArticleController extends Controller
         try {
             // Ambil data artikel dari API WordPress
             $response = $client->get(
-                'https://cms.ptgis.id/wp-json/wp/v2/posts',
+                'https://cosi.web.id/wp-json/wp/v2/posts',
                 [
                     'query' => [
                         'per_page' => 9,
@@ -54,7 +56,7 @@ class ArticleController extends Controller
         }
 
         // Ambil semua kategori
-        $categoriesResponse = $client->get('https://cms.ptgis.id/wp-json/wp/v2/categories');
+        $categoriesResponse = $client->get('https://cosi.web.id/wp-json/wp/v2/categories');
         $allCategories = json_decode($categoriesResponse->getBody(), true);
         $categoriesMap = [];
         foreach ($allCategories as $category) {
@@ -62,7 +64,7 @@ class ArticleController extends Controller
         }
 
         // Ambil semua tag
-        $tagsResponse = $client->get('https://cms.ptgis.id/wp-json/wp/v2/tags');
+        $tagsResponse = $client->get('https://cosi.web.id/wp-json/wp/v2/tags');
         $allTags = json_decode($tagsResponse->getBody(), true);
         $tagsMap = [];
         foreach ($allTags as $tag) {
@@ -76,7 +78,7 @@ class ArticleController extends Controller
 
             // Ambil featured media jika ada
             if (!empty($article['featured_media'])) {
-                $mediaResponse = $client->get("https://cms.ptgis.id/wp-json/wp/v2/media/{$article['featured_media']}");
+                $mediaResponse = $client->get("https://cosi.web.id/wp-json/wp/v2/media/{$article['featured_media']}");
                 $media = json_decode($mediaResponse->getBody(), true);
                 $thumbnail = $media['source_url'] ?? null;
             }
@@ -147,56 +149,110 @@ class ArticleController extends Controller
 
         try {
             // Ambil artikel berdasarkan slug
-            $response = $client->get("https://cms.ptgis.id/wp-json/wp/v2/posts", [
+            $response = $client->get("https://cosi.web.id/wp-json/wp/v2/posts", [
                 'query' => ['slug' => $slug],
             ]);
 
             $articles = json_decode($response->getBody(), true);
 
             if (empty($articles)) {
-                // Jika artikel tidak ditemukan, lempar 404
                 abort(404, 'Artikel tidak ditemukan.');
             }
 
-            $article = $articles[0]; // Ambil artikel pertama (slug harus unik)
+            $article = $articles[0]; // Ambil artikel pertama
 
-            // Ambil semua tags
-            $tagsResponse = $client->get("https://cms.ptgis.id/wp-json/wp/v2/tags");
+            // Ambil semua kategori dan tag secara paralel
+            $tagsResponse = $client->get("https://cosi.web.id/wp-json/wp/v2/tags");
+            $categoriesResponse = $client->get("https://cosi.web.id/wp-json/wp/v2/categories");
+
             $tags = json_decode($tagsResponse->getBody(), true);
-
-            // Ambil tag names berdasarkan IDs
-            $article['tags'] = isset($article['tags']) && is_array($article['tags'])
-                ? array_map(fn($id) => $tags[array_search($id, array_column($tags, 'id'))]['name'] ?? null, $article['tags'])
-                : [];
-
-            // Ambil semua kategori
-            $categoriesResponse = $client->get("https://cms.ptgis.id/wp-json/wp/v2/categories");
             $categories = json_decode($categoriesResponse->getBody(), true);
-
-            // Ambil category names berdasarkan IDs
-            $article['categories'] = isset($article['categories']) && is_array($article['categories'])
-                ? array_map(fn($id) => $categories[array_search($id, array_column($categories, 'id'))]['name'] ?? null, $article['categories'])
-                : [];
+            // dd($tags, $categories, $article);
+            // Ambil nama tag berdasarkan ID
+            $article['tags'] = $this->mapNamesByIds($article['tags'] ?? [], $tags);
+            // Ambil nama kategori berdasarkan ID
+            $article['categories'] = $this->mapNamesByIds($article['categories'] ?? [], $categories);
+            // dd($article['tags'], $article['categories'], $categories, $tags);
 
             // Ambil thumbnail
-            $article['thumbnail'] = null;
-            if (!empty($article['featured_media'])) {
-                $mediaResponse = $client->get("https://cms.ptgis.id/wp-json/wp/v2/media/{$article['featured_media']}");
-                $media = json_decode($mediaResponse->getBody(), true);
-                $article['thumbnail'] = $media['source_url'] ?? null;
-            }
+            $article['thumbnail'] = $this->getThumbnail($client, $article['featured_media'] ?? null);
 
-            // Debugging
-            // dd($article);
+            // Ambil rekomendasi artikel
+            $relatedResponse = $client->get("https://cosi.web.id/wp-json/wp/v2/posts", [
+                'query' => [
+                    'exclude' => [$article['id']], // Kecualikan artikel saat ini
+                    'per_page' => 4, // Batasi 4 artikel
+                    'orderby' => 'date',
+                    'order' => 'desc'
+                ]
+            ]);
+            $relatedArticles = json_decode($relatedResponse->getBody(), true);
+            $products = ProductCategory::all();
+            // Tambahkan thumbnail untuk setiap artikel terkait
+            foreach ($relatedArticles as &$relatedArticle) {
+                $relatedArticle['thumbnail'] = $this->getThumbnail($client, $relatedArticle['featured_media'] ?? null);
+                $relatedArticle['tags'] = $this->mapNamesByIds($relatedArticle['tags'] ?? [], $tags);
+                $relatedArticle['categories'] = $this->mapNamesByIds($relatedArticle['categories'] ?? [], $categories);
+            }
+            // dd($relatedArticles, $products);
 
             return view('components.article', [
-                'article' => $article
+                'article' => $article,
+                'relatedArticles' => $relatedArticles,
+                'products' => $products
             ]);
+        } catch (RequestException $e) {
+            // Tangani kesalahan permintaan HTTP
+
+            $errorMessage = $e->getResponse() ? $e->getResponse()->getBody()->getContents() : $e->getMessage();
+            abort(404, "Terjadi kesalahan: $errorMessage");
         } catch (\Exception $e) {
-            // Tangani error
+            // Tangani error lainnya
             abort(404, 'Terjadi kesalahan saat mengambil artikel.');
         }
     }
+
+    /**
+     * Helper function untuk memetakan ID ke nama berdasarkan koleksi data.
+     *
+     * @param array $ids
+     * @param array $items
+     * @return array
+     */
+    private function mapNamesByIds(array $ids, array $items): array
+    {
+        // Buat peta ID ke nama
+        $idToNameMap = array_column($items, 'name', 'id');
+
+        // Ambil nama berdasarkan ID
+        return array_map(function ($id) use ($idToNameMap) {
+            return $idToNameMap[$id] ?? null;
+        }, $ids);
+    }
+
+
+    /**
+     * Helper function untuk mendapatkan URL thumbnail.
+     *
+     * @param Client $client
+     * @param int|null $mediaId
+     * @return string|null
+     */
+    private function getThumbnail(Client $client, ?int $mediaId): ?string
+    {
+        if (!$mediaId) {
+            return null;
+        }
+
+        try {
+            $response = $client->get("https://cosi.web.id/wp-json/wp/v2/media/{$mediaId}");
+            $media = json_decode($response->getBody(), true);
+            return $media['source_url'] ?? null;
+        } catch (RequestException $e) {
+            return null; // Jika gagal, kembalikan null
+        }
+    }
+
 
 
     /**

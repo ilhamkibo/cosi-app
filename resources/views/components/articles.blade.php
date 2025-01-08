@@ -270,12 +270,14 @@
                         @endif
 
                         <!-- First Page -->
-                        <li>
-                            <a href="?page={{ 1 }}"
-                                class="px-3 py-2 text-sm font-medium {{ $currentPage == 1 ? 'text-green-75 underline underline-offset-2' : 'text-black' }} hover:text-blue-75">
-                                {{ 1 }}
-                            </a>
-                        </li>
+                        @if ($totalPages > 1)
+                            <li>
+                                <a href="?page={{ 1 }}"
+                                    class="px-3 py-2 text-sm font-medium {{ $currentPage == 1 ? 'text-green-75 underline underline-offset-2' : 'text-black' }} hover:text-blue-75">
+                                    {{ 1 }}
+                                </a>
+                            </li>
+                        @endif
 
                         <!-- Dot Before Page Numbers (If There Are Pages Before) -->
                         @if ($startPage > 2)

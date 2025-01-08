@@ -199,18 +199,16 @@
                             </div>
                         @endif
 
+                    @empty
+                        <tr>
+                            <td class="px-6 py-4" colspan="9">
+                                <span class="text-gray-500">No Product Found</span>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    @empty
-        <tr>
-            <td class="px-6 py-4" colspan="9">
-                <span class="text-gray-500">No Product Found</span>
-            </td>
-        </tr>
-        @endforelse
-        </tbody>
-        </table>
-
-    </div>
     </div>
 
 </x-layouts.admin.admin-app>

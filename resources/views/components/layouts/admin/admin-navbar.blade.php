@@ -41,6 +41,21 @@
             <a href="{{ route('home') }}" class="text-gray-500 underline hidden lg:block">Go to landing page -->
             </a>
         </div>
+        <div>
+            <form action="{{ route('admin.logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="flex items-center gap-1 p-1 text-center rounded-lg dark:hover:bg-gray-600 group hover:text-red-800 text-red-500 ">
+                    Logout
+                    <svg aria-hidden="true" class="mx-auto w-7 h-7 dark:text-gray-400" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                </button>
+            </form>
+        </div>
         {{-- <div class="flex items-center lg:order-2">
             <button type="button" data-drawer-toggle="drawer-navigation" aria-controls="drawer-navigation"
                 class="p-2 mr-1 text-gray-500 rounded-lg md:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
