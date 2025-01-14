@@ -48,5 +48,16 @@ export const handleNavbar = () => {
         } else if (navbar) {
             navbar.classList.remove("bg-gray-200/70");
         }
+
+        // Hide the logo when not in the first section
+        const logoContainer = document.querySelector(".logo-container");
+        if (logoContainer) {
+            if (window.scrollY > 1300) {
+                // Adjust this value based on when you want the logo to hide
+                logoContainer.style.display = "none";
+            } else {
+                logoContainer.style.display = "flex";
+            }
+        }
     });
 };

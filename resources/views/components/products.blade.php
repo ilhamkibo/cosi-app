@@ -12,7 +12,7 @@
                 aesthetics with durability, making them ideal for enhancing any space with a unique, eco-friendly touch.
             </p>
             <div class="mt-4 mb-6 rounded-lg xl:mx-0 mx-2">
-                <img src="{{ asset('images/promotion-CTA.png') }}" alt="cosi-promotion" class="w-full rounded-lg">
+                <img src="{{ asset('images/promotion-banner.png') }}" alt="cosi-promotion" class="w-full rounded-lg">
             </div>
             <div class="xl:px-0 px-5 mt-5 mb-2">
                 <h1 class="text-3xl font-fraunces">Categories</h1>
@@ -40,34 +40,15 @@
             </div>
             <div class="swiper-2 relative mySwiper overflow-x-hidden">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="flex h-96">
-                            <img src="{{ asset('images/section-1.png') }}" alt=""
-                                class="object-contain rounded-md">
-                        </div>
+                    @foreach ($collections as $collection)
+                        <div class="swiper-slide">
+                            <div class="flex h-96">
+                                <img src="{{ asset($collection->photo_url) }}" alt="{{ $collection->alt_text ?? '' }}"
+                                    class="object-contain rounded-md">
+                            </div>
 
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="flex h-96">
-                            <img src="{{ asset('images/section-2.png') }}" alt=""
-                                class="object-contain rounded-md">
                         </div>
-
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="flex h-96">
-                            <img src="{{ asset('images/section-3.png') }}" alt=""
-                                class="object-contain rounded-md">
-                        </div>
-
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="flex h-96">
-                            <img src="{{ asset('images/section-4.png') }}" alt=""
-                                class="object-contain rounded-md">
-                        </div>
-
-                    </div>
+                    @endforeach
                 </div>
                 <div>
                     <div class="swiper-pagination"></div>

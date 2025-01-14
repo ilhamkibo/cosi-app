@@ -106,7 +106,7 @@
             #RecycledGoodsForEveryone</h1>
 
         <div class="mb-10 h-48"
-            style="background-image: url('/images/about-2.png'); background-size: cover; background-position: center">
+            style="background-image: url('/images/about-1.png'); background-size: cover; background-position: center">
         </div>
         @include('components.layouts.footer')
     </div>

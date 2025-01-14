@@ -19,10 +19,12 @@ class AdminProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['product_photo', 'product_category', 'materials'])->get();
+        $products = Product::with(['product_photo', 'product_category', 'material'])->paginate(10);
+        $categories = ProductCategory::all();
         // dd($products);
         return view('components.admin-page.product.admin-products', [
-            'products' => $products
+            'products' => $products,
+            'categories' => $categories
         ]);
     }
 
@@ -146,7 +148,7 @@ class AdminProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::with(['product_photo', 'product_category', 'materials'])->findOrFail($id);
+        $product = Product::with(['product_photo', 'product_category', 'material'])->findOrFail($id);
         $materials = Material::all();
         $categories = ProductCategory::all();
         return view('components.admin-page.product.admin-product-edit', [
@@ -233,10 +235,10 @@ class AdminProductController extends Controller
             })->toArray();
 
             // Menyinkronkan data pivot dengan sync
-            $product->materials()->sync($materialsData);
+            $product->material()->sync($materialsData);
         } else {
             // Jika tidak ada material, hapus semua data pivot
-            $product->materials()->detach();
+            $product->material()->detach();
         }
 
         // Hapus foto berdasarkan ID

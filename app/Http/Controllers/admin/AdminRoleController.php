@@ -14,7 +14,8 @@ class AdminRoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
+        dd($roles);
         return view('components.admin-page.roleplay.roles', compact('roles'));
     }
 

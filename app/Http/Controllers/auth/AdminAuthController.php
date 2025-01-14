@@ -3,14 +3,48 @@
 namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AdminAuthController extends Controller
 {
     public function index()
     {
         return view('auth.login');
+    }
+
+
+    public function createUser()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        // Validasi data
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Simpan data user
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Redirect ke halaman tertentu atau login
+        return redirect()->route('home')->with('success', 'Registration successful!');
     }
 
     public function login(Request $request)
@@ -20,9 +54,34 @@ class AdminAuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->has('remember');
+
+
+        // Check the rate limit before attempting login
+        $key = 'login-attempts:' . $request->ip();
+        // Cek apakah pengguna sudah mencoba login lebih dari batas yang ditentukan
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            // // $seconds = RateLimiter::availableIn($key); // Ini akan memberi tahu berapa detik lagi pengguna dapat mencoba
+            // return back()->withErrors(['email' => "Too many login attempts. Please try again in {$seconds} seconds."]);
+            session()->flash('error', 'Too many login attempts. Please try again later in 5 minutes.');
+            abort(429); // Error 429 akan tetap dikembalikan
+        }
+
+        // Menambahkan hit untuk login yang gagal
+        RateLimiter::hit($key, 300); // 300 detik
+
+
+        // dd($credentials, $remember);
+
+        if (Auth::attempt($credentials, $remember)) {
             // dd(Auth::user());
             $request->session()->regenerate();
+
+            // if (Auth::user()->hasRole('user')) {
+            //     return redirect()->intended('/');
+            // }
+            // return redirect()->intended('admin/home');
+
 
             return redirect()->intended('admin/home');
         }

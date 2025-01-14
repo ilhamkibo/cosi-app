@@ -14,30 +14,43 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Membuat pengguna admin
-        $adminUser = User::create([
+        // Membuat pengguna superadmin
+        $superAdminUser = User::create([
             'name' => 'Ilham Prima',
             'email' => 'ilham.ilam59@gmail.com',
             'password' => bcrypt('Ilhamazz123*'),
         ]);
 
-        // Membuat peran admin
-        $role = Role::create(['name' => 'admin']);
+        // Membuat peran superadmin
+        $superAdminRole = Role::create(['name' => 'superadmin']);
 
-        // Membuat beberapa permission
+        // Daftar permission dengan kategori
         $permissions = [
-            'add products',
-            'edit products',
-            'delete products',
-            'view products',
+            'products' => ['add', 'edit', 'delete', 'view'],
+            'articles' => ['add', 'edit', 'delete', 'view'],
+            'categories' => ['add', 'edit', 'delete', 'view'],
+            'collections' => ['add', 'edit', 'delete', 'view'],
+            'partners' => ['add', 'edit', 'delete', 'view'],
+            'users' => ['add', 'edit', 'delete', 'view'],
         ];
 
-        foreach ($permissions as $permissionName) {
-            $permission = Permission::create(['name' => $permissionName]);
-            $role->givePermissionTo($permission);
+        // Membuat peran dan permission sesuai kategori
+        foreach ($permissions as $module => $actions) {
+            foreach ($actions as $action) {
+                $permissionName = "{$action} {$module}";
+                $permission = Permission::create(['name' => $permissionName]);
+
+                // Menetapkan permission ke peran modul
+                $roleName = "{$module} manager";
+                $role = Role::firstOrCreate(['name' => $roleName]);
+                $role->givePermissionTo($permission);
+
+                // Menetapkan permission ke superadmin
+                $superAdminRole->givePermissionTo($permission);
+            }
         }
 
-        // Menetapkan role admin ke pengguna
-        $adminUser->assignRole($role);
+        // Menetapkan role superadmin ke pengguna
+        $superAdminUser->assignRole($superAdminRole);
     }
 }

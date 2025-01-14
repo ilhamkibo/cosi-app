@@ -79,7 +79,7 @@
                 <!-- Material -->
                 <div id="materials-container">
                     <label for="materials" class="block text-sm font-medium text-gray-700 mb-1">Materials</label>
-                    @foreach ($product->materials as $index => $material)
+                    @foreach ($product->material as $index => $material)
                         <div class="flex space-x-4 mb-2 items-center" id="material-row-{{ $index }}">
                             <select name="materials[{{ $index }}][material_id]"
                                 class="block w-1/2 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"

@@ -13,4 +13,14 @@ class ProductMaterial extends Model
         'material_id',
         'quantity_used',
     ];
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

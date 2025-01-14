@@ -135,7 +135,7 @@
                     </li>
                 </ul>
             </li>
-            @role('admin')
+            @hasrole('admin')
                 <li>
                     <button type="button"
                         class="flex {{ (request()->is('admin/roles*') ? 'bg-blue-300 ' : request()->is('admin/permissions*')) ? 'bg-blue-300' : '' }} items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-blue-200 dark:text-white dark:hover:bg-gray-700"

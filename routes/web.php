@@ -19,9 +19,10 @@ Route::resource('articles', ArticleController::class);
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 
-Route::get('/admin/login', [AdminAuthController::class, 'index'])->middleware('guest')->name('login');
-Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
-Route::get('/admin/register', [AdminAuthController::class, 'register'])->middleware('guest')->name('admin.register');
+Route::get('admin/login', [AdminAuthController::class, 'index'])->middleware('guest')->name('login');
+Route::post('admin/login', [AdminAuthController::class, 'login'])->name('login.post');
+// Route::get('/register', [AdminAuthController::class, 'createUser'])->middleware('guest')->name('register.view');
+// Route::post('/register', [AdminAuthController::class, 'register'])->middleware('guest')->name('register.post');
 
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->middleware('auth')->name('admin.logout');
 

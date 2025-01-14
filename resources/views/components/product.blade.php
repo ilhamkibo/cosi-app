@@ -32,7 +32,7 @@
                                 <h1 class="font-regular">IDR {{ $product->price }}</h1>
                                 <h2 data-modal-target="modal-{{ $product->id }}"
                                     data-modal-toggle="modal-{{ $product->id }}"
-                                    class="underline text-gray-700 text-black cursor-pointer hover:scale-95 underline-offset-2">
+                                    class="underline text-gray-700 cursor-pointer hover:scale-95 underline-offset-2">
                                     Click for Details &raquo;
                                 </h2>
                             </div>
@@ -54,7 +54,7 @@
                                     </svg>
                                 </button>
                                 <div class="p-4 md:p-5 space-y-4 ">
-                                    <div class="block md:flex md:flex-row ">
+                                    <div class="block md:flex">
                                         <!-- Slider main container -->
                                         <div class="swiper">
                                             <!-- Additional required wrapper -->
@@ -74,11 +74,24 @@
                                             <div class="swiper-button-next"></div>
 
                                         </div>
-                                        <div class="md:ml-4 mt-4 md:mt-0 w-full flex flex-col gap-2 justify-center ">
-                                            <h1 class="text-2xl">{{ $product->name }}</h1>
+                                        <div class="md:ml-4 mt-4 md:mt-0 w-full flex flex-col gap-2 justify-center">
+                                            <h1 class="text-2xl font-medium whitespace-nowrap">{{ $product->name }}
+                                            </h1>
                                             <p> {{ $product->description }}</p>
-                                            <p>Material: {{ $product->material }}</p>
-                                            <p>Dimension: {{ $product->dimensions }}</p>
+                                            <div>
+                                                <p class="font-medium">Material:</p>
+                                                <ul class="list-disc list-inside">
+                                                    @foreach ($product->material as $item)
+                                                        <li>
+                                                            {{ $item->name }}
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            <p><span class="font-medium">Dimension (cm):</span> <br>
+                                                {{ $product->width }}W x
+                                                {{ $product->long }}L x
+                                                {{ $product->height }}H</p>
                                         </div>
                                     </div>
                                 </div>

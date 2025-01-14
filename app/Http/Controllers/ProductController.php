@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CollectionProduct;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
@@ -14,8 +15,10 @@ class ProductController extends Controller
     public function index()
     {
         $categories = ProductCategory::all();
+        $collections = CollectionProduct::all();
         return view('components.products', [
-            'categories' => $categories
+            'categories' => $categories,
+            'collections' => $collections
         ]);
     }
 
@@ -44,9 +47,26 @@ class ProductController extends Controller
             $products = Product::with('product_photo')->paginate(12);
         } else {
             $id = ProductCategory::where('slug', $slug)->first()->id;
-            $products = Product::where('category_id', $id)->with('product_photo')->paginate(12);
+            $products = Product::where('category_id', $id)->with(['product_photo', 'material'])->paginate(12);
         }
-        $categories = ProductCategory::orderByRaw("FIELD(name, 'All', 'Chairs', 'Tables', 'Others')")->get();
+        $categories = ProductCategory::all();
+
+        $allCategory = $categories->firstWhere('name', 'All');
+        $othersCategory = $categories->firstWhere('name', 'Others');
+
+        // Filter keluar "All" dan "Others" dari koleksi utama
+        $categories = $categories->reject(function ($category) {
+            return in_array($category->name, ['All', 'Others']);
+        });
+
+        // Tambahkan "All" di awal, dan "Others" di akhir
+        if ($allCategory) {
+            $categories->prepend($allCategory);
+        }
+
+        if ($othersCategory) {
+            $categories->push($othersCategory);
+        }
         // dd($categories, $products, $id);
         return view(
             'components.product',

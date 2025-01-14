@@ -19,31 +19,49 @@
             <!-- Navigation Links -->
             <div id="mobile-menu"
                 class="hidden flex-col gap-4 bg-white absolute top-full left-4 right-4 rounded-lg shadow-lg p-4 md:hidden">
-                <a href={{ route('products.index') }} class="block px-4 py-2 rounded-md hover:bg-gray-100">Products</a>
-                <a href={{ route('about') }} class="block px-4 py-2 rounded-md hover:bg-gray-100">About Us</a>
-                <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-100">Articles</a>
-                <a href={{ route('contact') }} class="block px-4 py-2 rounded-md hover:bg-gray-100">Contact</a>
+                <a href={{ route('products.index') }}
+                    class="{{ request()->is('products*') ? 'bg-green-75/50' : '' }} block px-4 py-2 rounded-md hover:bg-green-75">Products</a>
+                <a href={{ route('about') }}
+                    class="{{ request()->is('about') ? 'bg-green-75/50' : '' }} block px-4 py-2 rounded-md hover:bg-green-75">About
+                    Us</a>
+                <a href={{ route('articles.index') }}
+                    class="{{ request()->is('articles*') ? 'bg-green-75/50' : '' }} block px-4 py-2 rounded-md hover:bg-green-75">Articles</a>
+                <a href={{ route('contact') }}
+                    class="{{ request()->is('contact') ? 'bg-green-75/50' : '' }} block px-4 py-2 rounded-md hover:bg-green-75">Contact</a>
             </div>
         </div>
         <div class="gap-24 justify-center items-center hidden md:flex">
             <a href={{ route('products.index') }}
-                class="{{ request()->is('products*') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
+                class="{{ request()->is('products*') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} text-sm hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
                 <h1>Products</h1>
             </a>
             <a href={{ route('about') }}
-                class="{{ request()->is('about') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
+                class="{{ request()->is('about') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} text-sm hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
                 <h1>About Us</h1>
             </a>
             <a href={{ route('articles.index') }}
-                class="{{ request()->is('articles*') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
+                class="{{ request()->is('articles*') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} text-sm hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
                 <h1>Articles</h1>
             </a>
+            {{-- <a href={{ route('contact') }}
+                class="{{ request()->is('contact') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} text-sm hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
+                <h1>Contact</h1>
+            </a> --}}
         </div>
-        <div class="hidden md:flex">
+        <div class="hidden md:flex md:gap-2">
+            {{-- <a href={{ route('contact') }}
+                class="{{ request()->is('contact') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} text-sm hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out p-2">
+                Sign Up
+            </a>
+            <a href={{ route('login.view') }}
+                class="{{ request()->is('contact') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} text-sm hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out p-2 bg-blue-75/50  rounded-md">
+                Log In
+            </a> --}}
             <a href={{ route('contact') }}
-                class="{{ request()->is('contact') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
+                class="{{ request()->is('contact') ? 'underline underline-offset-4 p-2 hover:text-black rounded-md' : 'hover:text-gray-400' }} text-sm hover:scale-105 hover:transition hover:duration-300 hover:ease-in-out">
                 <h1>Contact</h1>
             </a>
+
         </div>
     </div>
 </nav>

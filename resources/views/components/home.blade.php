@@ -52,116 +52,40 @@
             <!-- Slider main container -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                {{-- @foreach ($articles as $article) --}}
-                <a href="#">
-                    <div
-                        class="flex w-full flex-col h-96 sm:h-72 md:h-48 gap-3 rounded-lg bg-gray-75 p-6 hover:scale-[0.995] hover:opacity-90 md:flex-row transition duration-300 ease-in-out">
-                        <div class="relative h-48 w-full md:h-auto md:w-1/2">
-                            <img loading="lazy" decoding="async" data-nimg="fill" class="rounded-md object-cover"
-                                sizes="fill" src="{{ asset('images/section-1.png') }}"
-                                style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
-                        </div>
-                        <div class="flex w-full flex-col">
-                            <div class="flex gap-2 text-sm">
-                                <p class="text-gray-600">Kegiatan</p>
-                                <p class="font-thin">—</p>
-                                <p class="font-thin text-zinc-400">Kamis, 24 Okt 2024</p>
+                @foreach ($articles as $article)
+                    <a href="{{ route('articles.show', $article['slug']) }}">
+                        <div
+                            class="flex w-full flex-col h-96 sm:h-72 md:h-48 gap-3 rounded-lg bg-gray-75 p-6 hover:scale-[0.995] hover:opacity-90 md:flex-row transition duration-300 ease-in-out">
+                            <div class="relative h-48 w-full md:h-auto md:w-1/2">
+                                <img loading="lazy" decoding="async" data-nimg="fill" class="rounded-md object-cover"
+                                    sizes="fill" src="{{ asset($article['thumbnail']) }}"
+                                    style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
                             </div>
-                            <p class="font-bold text-blue-75">Kalibrasi Onsite Push Pull di PT Unicharm Indonesia Tbk,
-                                KIIC Karawang
-                            </p>
-                            <div class="text-sm font-thin">
-                                <!-- Limit the length of the text and append "..." -->
-                                <p>{{ Str::limit('Kebutuhan akan jasa kalibrasi onsite Push Pull semakin meningkat, terutama di kawasan industri seperti Karawang dan KIIC. PT Global Instrument Services (PT GIS) menjadi mitra yang diandalkan untuk melakukan kalibrasi alat ukur langsung di lokasi, seperti yang baru-baru ini dilakukan di PT Unicharm Indonesia Tbk. Dengan layanan kalibrasi onsite, PT GIS membantu perusahaan mempertahankan keakuratan […]', 100, '...') }}
+                            <div class="flex w-full flex-col">
+                                <div class="flex gap-2 text-sm">
+                                    <p class="text-gray-600">{{ $article['categories'][0] ?? 'Uncategorized' }}</p>
+                                    <p class="font-thin">—</p>
+                                    <p class="font-thin text-zinc-400">{{ $article['date'] }}</p>
+                                </div>
+                                <p class="font-bold text-blue-75">{{ $article['title'] }}
                                 </p>
+                                <div class="text-sm font-thin">
+                                    <!-- Limit the length of the text and append "..." -->
+                                    <p>{!! Str::limit($article['excerpt'], 100, '...') !!}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div
-                        class="flex w-full flex-col h-96 sm:h-72 md:h-48 gap-3 rounded-lg bg-gray-75 p-6 hover:scale-[0.995] hover:opacity-90 md:flex-row transition duration-300 ease-in-out">
-                        <div class="relative h-48 w-full md:h-auto md:w-1/2">
-                            <img loading="lazy" decoding="async" data-nimg="fill" class="rounded-md object-cover"
-                                sizes="fill" src="{{ asset('images/section-1.png') }}"
-                                style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
-                        </div>
-                        <div class="flex w-full flex-col">
-                            <div class="flex gap-2 text-sm">
-                                <p class="text-gray-600">Kegiatan</p>
-                                <p class="font-thin">—</p>
-                                <p class="font-thin text-zinc-400">Kamis, 24 Okt 2024</p>
-                            </div>
-                            <p class="font-bold text-blue-75">Kalibrasi Onsite Push Pull di PT Unicharm Indonesia Tbk,
-                                KIIC Karawang
-                            </p>
-                            <div class="text-sm font-thin">
-                                <!-- Limit the length of the text and append "..." -->
-                                <p>{{ Str::limit('Kebutuhan akan jasa kalibrasi onsite Push Pull semakin meningkat, terutama di kawasan industri seperti Karawang dan KIIC. PT Global Instrument Services (PT GIS) menjadi mitra yang diandalkan untuk melakukan kalibrasi alat ukur langsung di lokasi, seperti yang baru-baru ini dilakukan di PT Unicharm Indonesia Tbk. Dengan layanan kalibrasi onsite, PT GIS membantu perusahaan mempertahankan keakuratan […]', 100, '...') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div
-                        class="flex w-full flex-col h-96 sm:h-72 md:h-48 gap-3 rounded-lg bg-gray-75 p-6 hover:scale-[0.995] hover:opacity-90 md:flex-row transition duration-300 ease-in-out">
-                        <div class="relative h-48 w-full md:h-auto md:w-1/2">
-                            <img loading="lazy" decoding="async" data-nimg="fill" class="rounded-md object-cover"
-                                sizes="fill" src="{{ asset('images/section-1.png') }}"
-                                style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
-                        </div>
-                        <div class="flex w-full flex-col">
-                            <div class="flex gap-2 text-sm">
-                                <p class="text-gray-600">Kegiatan</p>
-                                <p class="font-thin">—</p>
-                                <p class="font-thin text-zinc-400">Kamis, 24 Okt 2024</p>
-                            </div>
-                            <p class="font-bold text-blue-75">Kalibrasi Onsite Push Pull di PT Unicharm Indonesia Tbk,
-                                KIIC Karawang
-                            </p>
-                            <div class="text-sm font-thin">
-                                <!-- Limit the length of the text and append "..." -->
-                                <p>{{ Str::limit('Kebutuhan akan jasa kalibrasi onsite Push Pull semakin meningkat, terutama di kawasan industri seperti Karawang dan KIIC. PT Global Instrument Services (PT GIS) menjadi mitra yang diandalkan untuk melakukan kalibrasi alat ukur langsung di lokasi, seperti yang baru-baru ini dilakukan di PT Unicharm Indonesia Tbk. Dengan layanan kalibrasi onsite, PT GIS membantu perusahaan mempertahankan keakuratan […]', 100, '...') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div
-                        class="flex w-full flex-col h-96 sm:h-72 md:h-48 gap-3 rounded-lg bg-gray-75 p-6 hover:scale-[0.995] hover:opacity-90 md:flex-row transition duration-300 ease-in-out">
-                        <div class="relative h-48 w-full md:h-auto md:w-1/2">
-                            <img loading="lazy" decoding="async" data-nimg="fill" class="rounded-md object-cover"
-                                sizes="fill" src="{{ asset('images/section-1.png') }}"
-                                style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
-                        </div>
-                        <div class="flex w-full flex-col">
-                            <div class="flex gap-2 text-sm">
-                                <p class="text-gray-600">Kegiatan</p>
-                                <p class="font-thin">—</p>
-                                <p class="font-thin text-zinc-400">Kamis, 24 Okt 2024</p>
-                            </div>
-                            <p class="font-bold text-blue-75">Kalibrasi Onsite Push Pull di PT Unicharm Indonesia Tbk,
-                                KIIC Karawang
-                            </p>
-                            <div class="text-sm font-thin">
-                                <!-- Limit the length of the text and append "..." -->
-                                <p>{{ Str::limit('Kebutuhan akan jasa kalibrasi onsite Push Pull semakin meningkat, terutama di kawasan industri seperti Karawang dan KIIC. PT Global Instrument Services (PT GIS) menjadi mitra yang diandalkan untuk melakukan kalibrasi alat ukur langsung di lokasi, seperti yang baru-baru ini dilakukan di PT Unicharm Indonesia Tbk. Dengan layanan kalibrasi onsite, PT GIS membantu perusahaan mempertahankan keakuratan […]', 100, '...') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                {{-- @endforeach --}}
+                    </a>
+                @endforeach
 
             </div>
             <div class="text-white flex flex-col text-xl justify-center items-center py-10 w-full ">
                 <h1 class="text-center text-2xl">Check out articles on our social impact, projects, and our approach.
                 </h1>
 
-                <a href="#" class="py-4 underline hover:scale-105 transition-transform duration-300">More
+                <a href={{ route('articles.index') }}
+                    class="py-4 underline hover:scale-105 transition-transform duration-300">More
                     Articles
                     ></a>
             </div>

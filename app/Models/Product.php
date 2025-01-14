@@ -33,7 +33,7 @@ class Product extends Model
         return $this->hasMany(ProductPhoto::class);
     }
 
-    public function materials()
+    public function material()
     {
         return $this->belongsToMany(Material::class, 'product_materials', 'product_id', 'material_id')
             ->withPivot('quantity_used');

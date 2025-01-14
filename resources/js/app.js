@@ -8,6 +8,7 @@ import { handleNavbar } from "./modules/navbarControl";
 import { handleBurgerMenu } from "./modules/burgerMenu";
 import { setupAdminCreateProduct } from "./modules/adminCreateProduct.js";
 import { setupSidebarAdmin } from "./modules/sidebarAdmin.js";
+import "./modules/password-hide"; // Mengimpor script untuk menampilkan/menghilangkan password
 
 document.addEventListener("DOMContentLoaded", () => {
     setupSwiper();

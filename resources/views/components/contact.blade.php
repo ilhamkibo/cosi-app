@@ -1,5 +1,5 @@
 <x-layouts.main-app>
-    <div class="flex flex-col max-w-6xl mx-auto mt-24 justify-between min-h-screen">
+    <div class="flex flex-col max-w-6xl mx-auto mt-16 justify-between min-h-screen">
         <div class="my-6 mx-auto flex max-w-6xl flex-col items-stretch gap-20 p-5 md:gap-24" bis_skin_checked="1">
             <div class="relative flex flex-col items-center gap-10" bis_skin_checked="1">
                 <div class="max-w-3xl self-center text-center" bis_skin_checked="1">
