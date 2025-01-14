@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\AdminPermissionController;
 use App\Http\Controllers\admin\AdminProductController;
 use App\Http\Controllers\admin\AdminRoleController;
+use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\auth\AdminAuthController;
 use App\Http\Controllers\ContactController;
@@ -46,7 +47,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], functi
     });
 
     // Roles dan Permissions: Akses hanya untuk superadmin
-    Route::group(['middleware' => ['role:admin']], function () {
+    Route::group(['middleware' => ['role:superadmin']], function () {
         Route::resource('roles', AdminRoleController::class)->names([
             'index' => 'admin.roles.index',
             'create' => 'admin.roles.create',
@@ -55,6 +56,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], functi
             'edit' => 'admin.roles.edit',
             'update' => 'admin.roles.update',
             'destroy' => 'admin.roles.destroy',
+        ]);
+
+        Route::resource('users', AdminUserController::class)->names([
+            'index' => 'admin.users.index',
+            'create' => 'admin.users.create',
+            'store' => 'admin.users.store',
+            'show' => 'admin.users.show',
+            'edit' => 'admin.users.edit',
+            'update' => 'admin.users.update',
+            'destroy' => 'admin.users.destroy',
         ]);
 
         Route::resource('permissions', AdminPermissionController::class)->names([

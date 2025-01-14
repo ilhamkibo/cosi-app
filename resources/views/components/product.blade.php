@@ -29,7 +29,7 @@
                         <div class="flex justify-between items-start mt-2">
                             <h1 class="font-medium w-1/2">{{ $product->name }}</h1>
                             <div class="flex flex-col text-right">
-                                <h1 class="font-regular">IDR {{ $product->price }}</h1>
+                                <h1 class="font-regular">IDR {{ number_format($product->price) }}</h1>
                                 <h2 data-modal-target="modal-{{ $product->id }}"
                                     data-modal-toggle="modal-{{ $product->id }}"
                                     class="underline text-gray-700 cursor-pointer hover:scale-95 underline-offset-2">
