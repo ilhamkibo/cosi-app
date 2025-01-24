@@ -13,9 +13,15 @@
                 Oops.. You are not allowed to access this page!
             </p>
             <div class="w-full  rounded-lg mt-10 h-36 flex items-center justify-center">
-                <a href="/"
-                    class="text-center text-xl text-green-75 hover:scale-105 transition-transform duration-300">&crarr;
-                    Go back to home</a>
+                @if (Auth::check())
+                    <a href="/admin/home"
+                        class="text-center text-xl text-green-75 hover:scale-105 transition-transform duration-300">&crarr;
+                        Go back to home</a>
+                @else
+                    <a href="/"
+                        class="text-center text-xl text-green-75 hover:scale-105 transition-transform duration-300">&crarr;
+                        Go back to home</a>
+                @endif
             </div>
         </section>
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +32,7 @@ class AdminAuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -37,11 +40,17 @@ class AdminAuthController extends Controller
         }
 
         // Simpan data user
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        event(new Registered($user));
 
         // Redirect ke halaman tertentu atau login
         return redirect()->route('home')->with('success', 'Registration successful!');
@@ -101,5 +110,30 @@ class AdminAuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/admin/login');
+    }
+
+    public function verifyNotice()
+    {
+        return view('auth.verify-email');
+    }
+
+    public function verifyEmail(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+
+        return redirect()->route('admin.home');
+    }
+
+    public function verifyHandler(Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+        // dd($user);
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->back()->with('info', 'User sudah diverifikasi.');
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return back()->with('success', 'Verification link sent!');
     }
 }

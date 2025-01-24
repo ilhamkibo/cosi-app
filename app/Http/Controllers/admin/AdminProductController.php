@@ -19,12 +19,46 @@ class AdminProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['product_photo', 'product_category', 'material'])->paginate(10);
+        $products = Product::with(['product_photos', 'product_category', 'product_materials'])->paginate(10);
         $categories = ProductCategory::all();
-        // dd($products);
+        $trashedProducts = Product::onlyTrashed()->with(['product_photos', 'product_category', 'product_materials'])->paginate(10);
+
+        if (
+            request()->has('search')
+        ) {
+            $products = Product::with(['product_photos', 'product_category', 'product_materials'])
+                ->where('name', 'like', '%' . request('search') . '%')
+                ->orWhere('sku', 'like', '%' . request('search') . '%')
+                ->orWhere('description', 'like', '%' . request('search') . '%')
+                ->paginate(10);
+            $trashedProducts = Product::onlyTrashed()
+                ->with(['product_photos', 'product_category', 'product_materials'])
+                ->where(function ($query) {
+                    $search = request('search');
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('sku', 'like', '%' . $search . '%')
+                        ->orWhere('description', 'like', '%' . $search . '%');
+                })
+                ->paginate(10);
+
+            // dd($trashedProducts);
+        } else if (
+            request()->has('category') && request('category') != 'all'
+        ) {
+            $categoryId = $categories->where('slug', request('category'))->first()->id;
+
+            $products = Product::with(['product_photos', 'product_category', 'product_materials'])
+                ->where('category_id', $categoryId)
+                ->paginate(10);
+            $trashedProducts = Product::onlyTrashed()->with(['product_photos', 'product_category', 'product_materials'])
+                ->where('category_id', $categoryId)
+                ->paginate(10);
+        }
+
         return view('components.admin-page.product.admin-products', [
             'products' => $products,
-            'categories' => $categories
+            'categories' => $categories,
+            'trashedProducts' => $trashedProducts
         ]);
     }
 
@@ -148,7 +182,7 @@ class AdminProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::with(['product_photo', 'product_category', 'material'])->findOrFail($id);
+        $product = Product::with(['product_photos', 'product_category', 'product_materials'])->findOrFail($id);
         $materials = Material::all();
         $categories = ProductCategory::all();
         return view('components.admin-page.product.admin-product-edit', [
@@ -188,7 +222,7 @@ class AdminProductController extends Controller
             'photos' => 'nullable|array',
             'photos.*' => 'nullable|image|max:2048|mimes:jpg,jpeg,png|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000',
             'delete_photos' => 'nullable|array',
-            'delete_photos.*' => 'exists:product_photos,id',
+            'delete_photos.*' => 'exists:product_photoss,id',
         ]);
 
         // Memeriksa file yang diupload dan dimensi gambar
@@ -235,10 +269,10 @@ class AdminProductController extends Controller
             })->toArray();
 
             // Menyinkronkan data pivot dengan sync
-            $product->material()->sync($materialsData);
+            $product->product_materials()->sync($materialsData);
         } else {
             // Jika tidak ada material, hapus semua data pivot
-            $product->material()->detach();
+            $product->product_materials()->detach();
         }
 
         // Hapus foto berdasarkan ID
@@ -256,7 +290,7 @@ class AdminProductController extends Controller
             foreach ($request->file('photos') as $ind => $photo) {
                 $categoriSlug = ProductCategory::find($request->input('category_id'))->slug;
                 $path = $photo->store("products/{$categoriSlug}", 'public');
-                $product->product_photo()->create([
+                $product->product_photos()->create([
                     'product_id' => $product->id,
                     'photo_url' => $path,
                     'alt_text' => $request->input('name') . '-' . $ind,
@@ -267,11 +301,11 @@ class AdminProductController extends Controller
 
         if ($request->has('is_main')) {
             // Setel semua foto menjadi non-main
-            $product->product_photo()->update(['is_main' => false]);
+            $product->product_photos()->update(['is_main' => false]);
 
             // Setel foto utama yang baru
             foreach ($request->input('is_main') as $photoId) {
-                $photo = $product->product_photo()->find($photoId);
+                $photo = $product->product_photos()->find($photoId);
                 if ($photo) {
                     $photo->update(['is_main' => true]);
                 }
@@ -288,20 +322,37 @@ class AdminProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        if ($product->product_material->isNotEmpty()) {
-            foreach ($product->product_material as $material) {
-                $material->delete();
-            }
+        // Soft delete produk
+        $product->delete();
+
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully!');
+    }
+
+    public function permanentlyDelete($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+
+        // Hapus data di tabel pivot product_materials
+        if ($product->product_materials->isNotEmpty()) {
+            $product->product_materials()->detach();
         }
 
-        if ($product->product_photo->isNotEmpty()) {
-            foreach ($product->product_photo as $photo) {
+        // Hapus foto produk
+        if ($product->product_photos->isNotEmpty()) {
+            foreach ($product->product_photos as $photo) {
                 Storage::disk('public')->delete($photo->photo_url);
                 $photo->delete();
             }
         }
 
-        $product->delete();
-        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully!');
+        $product->forceDelete();
+        return redirect()->route('admin.products.index')->with('success', 'Product permanently deleted successfully!');
+    }
+
+    public function restore($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $product->restore();
+        return redirect()->route('admin.products.index')->with('success', 'Product restored successfully!');
     }
 }

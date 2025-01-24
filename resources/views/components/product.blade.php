@@ -81,7 +81,7 @@
                                             <div>
                                                 <p class="font-medium">Material:</p>
                                                 <ul class="list-disc list-inside">
-                                                    @foreach ($product->material as $item)
+                                                    @foreach ($product->materials as $item)
                                                         <li>
                                                             {{ $item->name }}
                                                         </li>

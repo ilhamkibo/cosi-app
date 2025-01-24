@@ -3,8 +3,10 @@
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\admin\AdminArticleController;
 use App\Http\Controllers\admin\AdminHomeController;
+use App\Http\Controllers\admin\AdminMaterialController;
 use App\Http\Controllers\admin\AdminPermissionController;
 use App\Http\Controllers\admin\AdminProductController;
+use App\Http\Controllers\admin\AdminProfileController;
 use App\Http\Controllers\admin\AdminRoleController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\ArticleController;
@@ -25,16 +27,36 @@ Route::post('admin/login', [AdminAuthController::class, 'login'])->name('login.p
 // Route::get('/register', [AdminAuthController::class, 'createUser'])->middleware('guest')->name('register.view');
 // Route::post('/register', [AdminAuthController::class, 'register'])->middleware('guest')->name('register.post');
 
-Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->middleware('auth')->name('admin.logout');
+
+
+Route::get('/review', function () {
+    return redirect('https://g.page/r/CT2JJIrE7ebGEAI/review');
+})->name('review');
+
 
 // Route::get('/admin', [AdminAuthController::class, 'index'])->name('admin');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], function () {
     Route::get('home', [AdminHomeController::class, 'index'])->name('admin.home');
-    Route::get('articles', [AdminArticleController::class, 'index'])->name('admin.articles');
+
+    Route::resource('profile', AdminProfileController::class)->names([
+        'edit' => 'admin.profile.edit',
+        'update' => 'admin.profile.update',
+        'destroy' => 'admin.profile.destroy',
+        'show' => 'admin.profile.show',
+        'create' => 'admin.profile.create',
+        'store' => 'admin.profile.store',
+        'index' => 'admin.profile.index',
+    ]);
+
+
+    Route::group(['middleware' => ['role:superadmin|articles manager']], function () {
+
+        Route::get('articles', [AdminArticleController::class, 'index'])->name('admin.articles');
+    });
 
     // Products: Akses untuk admin dan superadmin
-    Route::group(['middleware' => ['role:admin|superadmin']], function () {
+    Route::group(['middleware' => ['role:products manager|superadmin']], function () {
         Route::resource('products', AdminProductController::class)->names([
             'index' => 'admin.products.index',
             'create' => 'admin.products.create',
@@ -44,6 +66,24 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], functi
             'update' => 'admin.products.update',
             'destroy' => 'admin.products.destroy',
         ]);
+
+        Route::patch('products/{id}/restore', [AdminProductController::class, 'restore'])->name('admin.products.restore');
+        Route::delete('products/{id}/permanently-delete', [AdminProductController::class, 'permanentlyDelete'])->name('admin.products.permanentlyDelete');
+    });
+
+    Route::group(['middleware' => ['role:superadmin|materials manager']], function () {
+        Route::resource('materials', AdminMaterialController::class)->names([
+            'index' => 'admin.materials.index',
+            'create' => 'admin.materials.create',
+            'store' => 'admin.materials.store',
+            'show' => 'admin.materials.show',
+            'edit' => 'admin.materials.edit',
+            'update' => 'admin.materials.update',
+            'destroy' => 'admin.materials.destroy',
+        ]);
+
+        Route::patch('materials/{id}/restore', [AdminMaterialController::class, 'restore'])->name('admin.materials.restore');
+        Route::delete('materials/{id}/permanently-delete', [AdminMaterialController::class, 'permanentlyDelete'])->name('admin.materials.permanentlyDelete');
     });
 
     // Roles dan Permissions: Akses hanya untuk superadmin
@@ -80,7 +120,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], functi
     });
 });
 
+Route::middleware('auth')->group(function () {
+    Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-Route::get('/review', function () {
-    return redirect('https://g.page/r/CT2JJIrE7ebGEAI/review');
-})->name('review');
+    //Email Verification Notice
+    Route::get('/email/verify', [AdminAuthController::class, 'verifyNotice'])->name('verification.notice');
+
+    // Email Verification Handler
+    Route::get('/email/verify/{id}/{hash}', [AdminAuthController::class, 'verifyEmail'])->middleware('signed')->name('verification.verify');
+
+    // Resend Email Verification
+    Route::post('/email/verification-notification', [AdminAuthController::class, 'verifyHandler'])->middleware('throttle:6,1')->name('verification.send');
+});

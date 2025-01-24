@@ -15,7 +15,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sora antialiased dark:bg-black dark:text-white/50 bg-blue-75/50">
+<body class="font-sora antialiased dark:bg-black dark:text-white/50 bg-blue-75/50"
+    data-page="{{ Route::currentRouteName() }}">
 
     <div class="flex justify-center flex-col items-center mt-24">
         <a href="{{ route('home') }}"><img src="{{ asset('images/logo-white.png') }}" alt="Logo"></a>
@@ -32,26 +33,35 @@
                 <h1 class="text-center text-2xl font-semibold text-green-75">Welcome back!</h1>
                 <p class="text-center text-green-75 font-extralight text-sm mb-10">Please enter your details to sign in
                 </p>
-                <div class="grid grid-cols-1">
+                {{-- <div class="grid grid-cols-1">
                     <a href="#"
                         class="shadow shadow-gray-300 p-1 flex items-center justify-center rounded-lg text-center gap-4 h-16 hover:bg-green-75/30">
                         <img src="{{ asset('images/login/google.png') }}" alt="" class="object-contain h-5">
                         <h1 class="text-sm text-gray-600">Sign in with Google</h1>
                     </a>
-                    {{-- <a href="#"
+                    <a href="#"
                         class="shadow shadow-gray-300 p-2 rounded-lg text-center h-16 hover:bg-blue-75/30">
                         <img src="{{ asset('images/login/github.png') }}" alt=""
                             class="object-contain h-full w-full">
-                    </a> --}}
+                    </a>
                 </div>
                 <div class="inline-flex items-center justify-center w-full">
                     <hr class="w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
                     <span
                         class="absolute text-sm text-center px-3 font-medium text-gray-500 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">or
                         sign in with email</span>
-                </div>
+                </div> --}}
                 <form method="POST" action="{{ route('login.post') }}">
                     @csrf
+                    <!-- Input Name -->
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-green-75 mb-2">Name</label>
+                        <input type="text" id="name" name="name"
+                            class="w-full bg-gray-100 text-gray-800 text-sm rounded-lg focus:ring-blue-75 focus:border-blue-75 border-gray-300 p-3"
+                            placeholder="Enter your name" required value="{{ old('name') }}" />
+                    </div>
+
+
                     <!-- Input Email -->
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium text-green-75 mb-2">Email</label>
@@ -62,19 +72,56 @@
                     </div>
 
                     <!-- Input Password -->
-                    <div class="mb-4">
-                        <label for="password" class="block text-sm font-medium text-green-75 mb-2">Password</label>
+                    <label for="password" class="block text-sm font-medium text-green-75 mb-2">Password</label>
+                    <div class="mb-4 relative">
                         <input type="password" id="password" name="password"
                             class="w-full bg-gray-100 text-gray-800 text-sm rounded-lg focus:ring-blue-75 focus:border-blue-75 border-gray-300 p-3"
                             placeholder="Enter your password" required />
+
+                        <!-- Icon to toggle password visibility -->
+                        <button type="button"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none">
+                            <i id="toggle-password-icon" class="fas fa-eye"></i>
+                        </button>
                     </div>
+
+                    <!-- Input Password Confirm -->
+                    <label for="password_confirmation" class="block text-sm font-medium text-green-75 mb-2">Confirm
+                        Password</label>
+                    <div class="mb-4 relative">
+                        <input type="password" id="password_confirmation" name="password_confirmation"
+                            class="w-full bg-gray-100 text-gray-800 text-sm rounded-lg focus:ring-blue-75 focus:border-blue-75 border-gray-300 p-3"
+                            placeholder="Confirm your password" required />
+
+                        <!-- Icon to toggle password visibility -->
+                        <button type="button"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none">
+                            <i id="toggle-password-icon" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <label for="admin_password" class="block text-sm font-medium text-green-75 mb-2">Admin
+                        Password</label>
+                    <div class="relative">
+                        <input type="password" id="admin_password" name="admin_password"
+                            class="w-full bg-gray-100 text-gray-800 text-sm rounded-lg focus:ring-blue-75 focus:border-blue-75 border-gray-300 p-3"
+                            placeholder="Enter your password" required />
+
+                        <!-- Icon to toggle password visibility -->
+                        <button type="button"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none">
+                            <i id="toggle-password-icon" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <small class=" text-gray-500 text-xs">Ask Admin for Password code.</small>
+
 
 
 
                     <!-- Button -->
                     <button type="submit"
-                        class="w-full bg-green-75/80 hover:bg-green-75 text-white text-sm font-medium py-2 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300">
-                        Log in
+                        class="mt-4 w-full bg-green-75/80 hover:bg-green-75 text-white text-sm font-medium py-2 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300">
+                        Register Account
                     </button>
 
                     @error('email')

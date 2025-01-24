@@ -79,7 +79,7 @@
                 <!-- Material -->
                 <div id="materials-container">
                     <label for="materials" class="block text-sm font-medium text-gray-700 mb-1">Materials</label>
-                    @foreach ($product->material as $index => $material)
+                    @foreach ($product->product_materials as $index => $material)
                         <div class="flex space-x-4 mb-2 items-center" id="material-row-{{ $index }}">
                             <select name="materials[{{ $index }}][material_id]"
                                 class="block w-1/2 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -162,7 +162,7 @@
 
                     <!-- Menampilkan foto yang sudah ada -->
                     <div id="existing-photos">
-                        @foreach ($product->product_photo as $photo)
+                        @foreach ($product->product_photos as $photo)
                             <div class="flex items-center mb-2 gap-4" id="photo-row-{{ $photo->id }}">
                                 <img src="{{ asset('storage/' . $photo->photo_url) }}" alt="Product Photo"
                                     class="w-16 h-16 object-cover mr-2">

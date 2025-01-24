@@ -41,7 +41,7 @@
             <a href="{{ route('home') }}" class="text-gray-500 underline hidden lg:block">Go to landing page -->
             </a>
         </div>
-        <div>
+        {{-- <div>
             <form action="{{ route('admin.logout') }}" method="POST">
                 @csrf
                 <button type="submit"
@@ -55,8 +55,8 @@
                     </svg>
                 </button>
             </form>
-        </div>
-        {{-- <div class="flex items-center lg:order-2">
+        </div> --}}
+        <div class="flex items-center lg:order-2">
             <button type="button" data-drawer-toggle="drawer-navigation" aria-controls="drawer-navigation"
                 class="p-2 mr-1 text-gray-500 rounded-lg md:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
                 <span class="sr-only">Toggle search</span>
@@ -244,7 +244,7 @@
                 </a>
             </div>
             <!-- Apps -->
-            <button type="button" data-dropdown-toggle="apps-dropdown"
+            {{-- <button type="button" data-dropdown-toggle="apps-dropdown"
                 class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
                 <span class="sr-only">View notifications</span>
                 <!-- Icon -->
@@ -253,7 +253,7 @@
                         d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
                     </path>
                 </svg>
-            </button>
+            </button> --}}
             <!-- Dropdown menu -->
             <div class="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:bg-gray-700 dark:divide-gray-600 rounded-xl"
                 id="apps-dropdown">
@@ -392,22 +392,23 @@
             <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl"
                 id="dropdown">
                 <div class="py-3 px-4">
-                    <span class="block text-sm font-semibold text-gray-900 dark:text-white">Neil Sims</span>
-                    <span class="block text-sm text-gray-900 truncate dark:text-white">name@flowbite.com</span>
+                    <span
+                        class="block text-sm font-semibold text-gray-900 dark:text-white">{{ Auth::user()->name }}</span>
+                    <span class="block text-sm text-gray-900 truncate dark:text-white">{{ Auth::user()->email }}</span>
                 </div>
                 <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
                     <li>
-                        <a href="#"
+                        <a href="{{ route('admin.profile.index') }}"
                             class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">My
                             profile</a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="#"
                             class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">Account
                             settings</a>
-                    </li>
+                    </li> --}}
                 </ul>
-                <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+                {{-- <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
                     <li>
                         <a href="#"
                             class="flex items-center py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg
@@ -450,15 +451,19 @@
                             </svg>
                         </a>
                     </li>
-                </ul>
+                </ul> --}}
                 <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
                     <li>
-                        <a href="#"
-                            class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign
-                            out</a>
+                        <form action="{{ route('admin.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="block w-full text-left py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                Sign out
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
-        </div> --}}
+        </div>
     </div>
 </nav>

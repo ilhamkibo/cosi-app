@@ -34,67 +34,71 @@
                     <span class="ml-3">Overview</span>
                 </a>
             </li>
-            <li>
-                <button type="button"
-                    class="{{ request()->is('admin/products*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700"
-                    aria-controls="dropdown-products" data-collapse-toggle="dropdown-products">
-                    <svg aria-hidden="true"
-                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M14 17h2.75A2.25 2.25 0 0 0 19 14.75v-9.5A2.25 2.25 0 0 0 16.75 3H14v14ZM12.5 3h-5v14h5V3ZM3.25 3H6v14H3.25A2.25 2.25 0 0 1 1 14.75v-9.5A2.25 2.25 0 0 1 3.25 3Z" />
-                    </svg>
+            @role(['superadmin', 'products manager'])
+                <li>
+                    <button type="button"
+                        class="{{ request()->is('admin/products*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700"
+                        aria-controls="dropdown-products" data-collapse-toggle="dropdown-products">
+                        <svg aria-hidden="true"
+                            class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14 17h2.75A2.25 2.25 0 0 0 19 14.75v-9.5A2.25 2.25 0 0 0 16.75 3H14v14ZM12.5 3h-5v14h5V3ZM3.25 3H6v14H3.25A2.25 2.25 0 0 1 1 14.75v-9.5A2.25 2.25 0 0 1 3.25 3Z" />
+                        </svg>
 
-                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Products</span>
-                    <svg aria-hidden="true" class="w-6 h-6 transition-transform duration-500 ease-in-out transform"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </button>
-                <ul id="dropdown-products" class="hidden py-2 space-y-2 transition-all duration-500 ease-in-out">
-                    <li>
-                        <a href="{{ route('admin.products.index') }}"
-                            class="{{ request()->is('admin/products*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700">All
-                            Products</a>
-                    </li>
-                    <li>
-                        <a href="#"
-                            class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-blue-200 dark:text-white dark:hover:bg-gray-700">Settings</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button type="button"
-                    class="{{ request()->is('admin/articles*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700"
-                    aria-controls="dropdown-articles" data-collapse-toggle="dropdown-articles">
-                    <svg aria-hidden="true"
-                        class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Articles</span>
-                    <svg aria-hidden="true" class="w-6 h-6 transition-transform duration-500 ease-in-out transform"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </button>
-                @auth
-                    <ul id="dropdown-articles" class="hidden py-2 space-y-2 ">
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">Products</span>
+                        <svg aria-hidden="true" class="w-6 h-6 transition-transform duration-500 ease-in-out transform"
+                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <ul id="dropdown-products" class="hidden py-2 space-y-2 transition-all duration-500 ease-in-out">
                         <li>
-                            <a href="{{ route('admin.articles') }}"
-                                class="{{ request()->is('admin/articles*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700">All
-                                Articles</a>
+                            <a href="{{ route('admin.products.index') }}"
+                                class="{{ request()->is('admin/products*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700">All
+                                Products</a>
+                        </li>
+                        <li>
+                            <a href={{ route('admin.materials.index') }}
+                                class="{{ request()->is('admin/materials*') ? 'bg-blue-300 ' : '' }} flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-blue-200 dark:text-white dark:hover:bg-gray-700">Materials</a>
                         </li>
                     </ul>
+                </li>
+            @endrole
+            @role(['superadmin', 'articles manager'])
+                <li>
+                    <button type="button"
+                        class="{{ request()->is('admin/articles*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700"
+                        aria-controls="dropdown-articles" data-collapse-toggle="dropdown-articles">
+                        <svg aria-hidden="true"
+                            class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">Articles</span>
+                        <svg aria-hidden="true" class="w-6 h-6 transition-transform duration-500 ease-in-out transform"
+                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    @auth
+                        <ul id="dropdown-articles" class="hidden py-2 space-y-2 ">
+                            <li>
+                                <a href="{{ route('admin.articles') }}"
+                                    class="{{ request()->is('admin/articles*') ? 'bg-blue-300 ' : '' }} hover:bg-blue-200 flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group dark:text-white dark:hover:bg-gray-700">All
+                                    Articles</a>
+                            </li>
+                        </ul>
 
-                @endauth
-            </li>
+                    @endauth
+                </li>
+            @endrole
             <li>
                 <button type="button"
                     class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-blue-200 dark:text-white dark:hover:bg-gray-700"
