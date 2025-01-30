@@ -24,7 +24,7 @@
                         class="hover:scale-95 transition-transform duration-300">
                         <div class="w-full">
                             <div class="bg-gray-75 overflow-hidden rounded-lg">
-                                <img src="{{ asset($category->photo_url) }}" class="object-contain"
+                                <img src="{{ asset('/storage/' . $category->photo_url) }}" class="object-contain"
                                     alt={{ $category->slug }}>
                             </div>
                             <div class="py-2">

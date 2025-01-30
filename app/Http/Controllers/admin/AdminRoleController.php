@@ -14,8 +14,8 @@ class AdminRoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::with('permissions')->get();
-        dd($roles);
+        $roles = Role::with('permissions')->paginate(10);
+        // dd($roles);
         return view('components.admin-page.roleplay.roles', compact('roles'));
     }
 
@@ -25,7 +25,7 @@ class AdminRoleController extends Controller
     public function create()
     {
         $permissions = Permission::all();
-        // return view('roles.create', compact('permissions'));
+        return view('components.admin-page.roleplay.role-create', compact('permissions'));
     }
 
     /**
@@ -41,7 +41,7 @@ class AdminRoleController extends Controller
         $role = Role::create(['name' => $request->name]);
         $role->syncPermissions($request->permissions);
 
-        return redirect()->route('components.admin-page.roleplay.roles')->with('success', 'Role created successfully.');
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
     }
 
     /**
@@ -57,8 +57,9 @@ class AdminRoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $role = Role::findOrFail($role->id);
         $permissions = Permission::all();
-        // return view('roles.edit', compact('role', 'permissions'));
+        return view('components.admin-page.roleplay.role-edit', compact('role', 'permissions'));
     }
 
     /**
@@ -74,7 +75,7 @@ class AdminRoleController extends Controller
         $role->update(['name' => $request->name]);
         $role->syncPermissions($request->permissions);
 
-        return redirect()->route('components.admin-page.roleplay.roles')->with('success', 'Role updated successfully.');
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
     }
 
     /**

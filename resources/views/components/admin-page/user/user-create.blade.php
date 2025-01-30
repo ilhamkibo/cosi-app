@@ -29,29 +29,41 @@
                     @enderror
                 </div>
 
-                <!-- Roles -->
+                <!-- Roles (Checkbox) -->
                 <div>
-                    <label for="roles" class="block text-sm font-medium text-gray-700">Roles</label>
-                    <select id="roles" name="roles[]" multiple
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('roles') border-red-500 @enderror">
+                    <label class="block text-sm font-medium text-gray-700">Roles</label>
+                    <div class="mt-2 grid grid-cols-4 gap-4">
                         @foreach ($roles as $role)
-                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="role-{{ $role->id }}" name="roles[]"
+                                    value="{{ $role->name }}"
+                                    class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 @error('roles') border-red-500 @enderror"
+                                    {{ in_array($role->name, old('roles', [])) ? 'checked' : '' }}>
+                                <label for="role-{{ $role->id }}"
+                                    class="ml-2 text-sm text-gray-900">{{ $role->name }}</label>
+                            </div>
                         @endforeach
-                    </select>
+                    </div>
                     @error('roles')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Permissions -->
+                <!-- Permissions (Checkbox) -->
                 <div>
-                    <label for="permissions" class="block text-sm font-medium text-gray-700">Permissions</label>
-                    <select id="permissions" name="permissions[]" multiple
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('permissions') border-red-500 @enderror">
+                    <label class="block text-sm font-medium text-gray-700">Permissions</label>
+                    <div class="mt-2 grid grid-cols-4 gap-4">
                         @foreach ($permissions as $permission)
-                            <option value="{{ $permission->name }}">{{ $permission->name }}</option>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="permission-{{ $permission->id }}" name="permissions[]"
+                                    value="{{ $permission->name }}"
+                                    class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 @error('permissions') border-red-500 @enderror"
+                                    {{ in_array($permission->name, old('permissions', [])) ? 'checked' : '' }}>
+                                <label for="permission-{{ $permission->id }}"
+                                    class="ml-2 text-sm text-gray-900">{{ $permission->name }}</label>
+                            </div>
                         @endforeach
-                    </select>
+                    </div>
                     @error('permissions')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror

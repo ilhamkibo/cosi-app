@@ -3,8 +3,9 @@
     <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 mb-4">
         <div class="max-w-4xl mx-auto bg-white p-6 xl:my-2 rounded shadow">
             <h1 class="text-2xl font-bold mb-4">Edit User</h1>
-            <form action="{{ route('admin.users.store') }}" method="POST" class="space-y-4">
+            <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="space-y-4">
                 @csrf
+                @method('PUT')
 
                 <!-- Name -->
                 <div>
@@ -31,17 +32,17 @@
 
                 <!-- Roles -->
                 <div>
-                    <label for="roles" class="block text-sm font-medium text-gray-700">Roles</label>
-                    <select id="roles" name="roles[]" multiple
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('roles') border-red-500 @enderror">
+                    <label class="block text-sm font-medium text-gray-700">Roles</label>
+                    <div class="mt-2 grid grid-cols-4 gap-4">
                         @foreach ($roles as $role)
-                            <option value="{{ $role->name }}"
-                                {{ collect(old('roles', $user->roles->pluck('name')))->contains($role->name) ? 'selected' : '' }}>
-                                {{ $role->name }}
-                            </option>
+                            <div>
+                                <input type="checkbox" id="role_{{ $role->name }}" name="roles[]"
+                                    value="{{ $role->name }}"
+                                    {{ in_array($role->name, old('roles', $user->roles->pluck('name')->toArray())) ? 'checked' : '' }}>
+                                <label for="role_{{ $role->name }}" class="text-sm">{{ $role->name }}</label>
+                            </div>
                         @endforeach
-                    </select>
-
+                    </div>
                     @error('roles')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -49,16 +50,18 @@
 
                 <!-- Permissions -->
                 <div>
-                    <label for="permissions" class="block text-sm font-medium text-gray-700">Permissions</label>
-                    <select id="permissions" name="permissions[]" multiple
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('permissions') border-red-500 @enderror">
+                    <label class="block text-sm font-medium text-gray-700">Permissions</label>
+                    <div class="mt-2 grid grid-cols-4 gap-4">
                         @foreach ($permissions as $permission)
-                            <option value="{{ $permission->name }}"
-                                {{ collect(old('permissions', $user->permissions->pluck('name')))->contains($permission->name) ? 'selected' : '' }}>
-                                {{ $permission->name }}
-                            </option>
+                            <div>
+                                <input type="checkbox" id="permission_{{ $permission->name }}" name="permissions[]"
+                                    value="{{ $permission->name }}"
+                                    {{ in_array($permission->name, old('permissions', $user->permissions->pluck('name')->toArray())) ? 'checked' : '' }}>
+                                <label for="permission_{{ $permission->name }}"
+                                    class="text-sm">{{ $permission->name }}</label>
+                            </div>
                         @endforeach
-                    </select>
+                    </div>
                     @error('permissions')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror

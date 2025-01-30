@@ -64,6 +64,10 @@
                             <a href={{ route('admin.materials.index') }}
                                 class="{{ request()->is('admin/materials*') ? 'bg-blue-300 ' : '' }} flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-blue-200 dark:text-white dark:hover:bg-gray-700">Materials</a>
                         </li>
+                        <li>
+                            <a href={{ route('admin.categories.index') }}
+                                class="{{ request()->is('admin/categories*') ? 'bg-blue-300 ' : '' }} flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-blue-200 dark:text-white dark:hover:bg-gray-700">Categories</a>
+                        </li>
                     </ul>
                 </li>
             @endrole

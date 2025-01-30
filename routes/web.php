@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\admin\AdminArticleController;
+use App\Http\Controllers\admin\AdminCategoryController;
 use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\AdminMaterialController;
 use App\Http\Controllers\admin\AdminPermissionController;
@@ -107,6 +108,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], functi
             'update' => 'admin.users.update',
             'destroy' => 'admin.users.destroy',
         ]);
+        Route::patch('users/{id}/restore', [AdminUserController::class, 'restore'])->name('admin.users.restore');
+        Route::delete('users/{id}/permanently-delete', [AdminUserController::class, 'permanentlyDelete'])->name('admin.users.permanentlyDelete');
+
 
         Route::resource('permissions', AdminPermissionController::class)->names([
             'index' => 'admin.permissions.index',
@@ -116,6 +120,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], functi
             'edit' => 'admin.permissions.edit',
             'update' => 'admin.permissions.update',
             'destroy' => 'admin.permissions.destroy',
+        ]);
+
+        Route::resource('categories', AdminCategoryController::class)->names([
+            'index' => 'admin.categories.index',
+            'create' => 'admin.categories.create',
+            'store' => 'admin.categories.store',
+            'show' => 'admin.categories.show',
+            'edit' => 'admin.categories.edit',
+            'update' => 'admin.categories.update',
+            'destroy' => 'admin.categories.destroy',
         ]);
     });
 });

@@ -13,7 +13,7 @@ class AdminPermissionController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::paginate(10);
         return view('components.admin-page.roleplay.permissions', compact('permissions'));
     }
 
@@ -23,7 +23,7 @@ class AdminPermissionController extends Controller
      */
     public function create()
     {
-        return view('permissions.create');
+        return view('components.admin-page.roleplay.permission-create');
     }
 
     /**
@@ -34,7 +34,7 @@ class AdminPermissionController extends Controller
         $request->validate(['name' => 'required|unique:permissions']);
         Permission::create(['name' => $request->name]);
 
-        return redirect()->route('components.admin-page.roleplay.permissions')->with('success', 'Permission created successfully.');
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission created successfully.');
     }
 
     /**
@@ -50,7 +50,8 @@ class AdminPermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        // return view('permissions.edit', compact('permission'));
+        $permission = Permission::findOrFail($permission->id);
+        return view('components.admin-page.roleplay.permission-edit', compact('permission'));
     }
 
     /**
@@ -61,7 +62,7 @@ class AdminPermissionController extends Controller
         $request->validate(['name' => 'required|unique:permissions,name,' . $permission->id]);
         $permission->update(['name' => $request->name]);
 
-        return redirect()->route('components.admin-page.roleplay.permissions')->with('success', 'Permission updated successfully.');
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission updated successfully.');
     }
 
     /**
