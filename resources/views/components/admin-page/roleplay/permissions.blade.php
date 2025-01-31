@@ -91,8 +91,8 @@
                     @forelse ($permissions as $ind => $permission)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <th scope="row"
-                                class="px-3 py-2 {{ $ind === last($permissions) ? 'rounded-bl-md' : '' }} font-medium text-gray-900 dark:text-white">
-                                {{ $ind + 1 }}
+                                class="px-3 py-2 {{ $ind + $permissions->firstItem() === last($permissions) ? 'rounded-bl-md' : '' }} font-medium text-gray-900 dark:text-white">
+                                {{ $ind + $permissions->firstItem() }}
                             </th>
                             <th scope="row"
                                 class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">

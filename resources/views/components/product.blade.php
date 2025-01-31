@@ -17,9 +17,9 @@
                 @forelse ($products as $product)
                     <div class="text-sm">
                         <div
-                            class="h-48 rounded-lg @if ($product->product_photo->isEmpty()) flex justify-center items-center border @endif">
-                            @if ($product->product_photo->isNotEmpty())
-                                <img src="{{ asset('storage/' . $product->product_photo->where('is_main', true)->first()->photo_url) }}"
+                            class="h-48 rounded-lg @if ($product->product_photos->isEmpty()) flex justify-center items-center border @endif">
+                            @if ($product->product_photos->isNotEmpty())
+                                <img src="{{ asset('storage/' . $product->product_photos->where('is_main', true)->first()->photo_url) }}"
                                     class="object-cover rounded-lg w-full h-full" alt="{{ $product->alt_text }}">
                             @else
                                 <span class="text-center text-lg">Image Unavailable.</span>
@@ -60,7 +60,7 @@
                                             <!-- Additional required wrapper -->
                                             <div class="swiper-wrapper">
                                                 <!-- Slides -->
-                                                @foreach ($product->product_photo as $item)
+                                                @foreach ($product->product_photos as $item)
                                                     <div class="swiper-slide">
                                                         <img src="{{ asset('storage/' . $item->photo_url) }}"
                                                             alt="{{ $item->alt_text }}"
@@ -81,7 +81,7 @@
                                             <div>
                                                 <p class="font-medium">Material:</p>
                                                 <ul class="list-disc list-inside">
-                                                    @foreach ($product->materials as $item)
+                                                    @foreach ($product->product_materials as $item)
                                                         <li>
                                                             {{ $item->name }}
                                                         </li>

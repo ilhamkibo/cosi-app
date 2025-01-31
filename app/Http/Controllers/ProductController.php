@@ -44,10 +44,10 @@ class ProductController extends Controller
     public function show(string $slug)
     {
         if ($slug == 'all') {
-            $products = Product::with('product_photo')->paginate(12);
+            $products = Product::with('product_photos')->paginate(12);
         } else {
             $id = ProductCategory::where('slug', $slug)->first()->id;
-            $products = Product::where('category_id', $id)->with(['product_photo', 'material'])->paginate(12);
+            $products = Product::where('category_id', $id)->with(['product_photos', 'product_materials'])->paginate(12);
         }
         $categories = ProductCategory::all();
 

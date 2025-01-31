@@ -131,6 +131,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], functi
             'update' => 'admin.categories.update',
             'destroy' => 'admin.categories.destroy',
         ]);
+        Route::patch('categories/{id}/restore', [AdminCategoryController::class, 'restore'])->name('admin.categories.restore');
+        Route::delete('categories/{id}/permanently-delete', [AdminCategoryController::class, 'permanentlyDelete'])->name('admin.categories.permanentlyDelete');
     });
 });
 

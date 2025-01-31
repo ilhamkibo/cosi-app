@@ -16,7 +16,7 @@
                 <div class="w-full flex justify-center items-center gap-8">
                     @foreach ($categories as $categoryProduct)
                         @if ($categoryProduct->name != 'All')
-                            <div>
+                            <div class="flex flex-col items-center">
                                 <h1>{{ $categoryProduct->name }}</h1>
                                 <div
                                     class="flex items-center justify-center w-14 h-14 rounded-full border-2 border-blue-500 bg-gray-100">
@@ -45,8 +45,8 @@
                 </div>
                 <div class="w-full flex justify-center items-center gap-8">
                     @foreach ($categoriesCount as $articleCategory)
-                        <div>
-                            <h1>{{ $articleCategory['name'] }}</h1>
+                        <div class="flex flex-col items-center">
+                            <h1 class="text-center">{{ $articleCategory['name'] }}</h1>
                             <div
                                 class="flex items-center justify-center w-14 h-14 rounded-full border-2 border-blue-500 bg-gray-100">
                                 <h1 class="text-xl font-bold text-blue-500">{{ $articleCategory['count'] }}</h1>
@@ -57,9 +57,23 @@
             </div>
         </div>
         <div class="bg-white shadow-sm shadow-gray-500/50 rounded-lg">
-            <h1 class="p-2">Total Sales</h1>
-            <div class="flex h-full justify-center items-center">
-                <h1 class="text-3xl">$4,000,000.00</h1>
+            <h1 class="p-2">Running Project</h1>
+
+            <div class="p-2">
+                <h1 class="text-3xl text-yellow-500">Upcoming: 20</h1>
+                <h1 class="text-3xl text-red-500">On-Going: 20</h1>
+                <h1 class="text-3xl text-green-500">Finished: 10</h1>
+                <h1 class="text-3xl font-bold text-center mt-8 text-blue-500">Total: 30/50</h1>
+            </div>
+        </div>
+        <div class="bg-white shadow-sm shadow-gray-500/50 rounded-lg">
+            <h1 class="p-2">Running Project</h1>
+
+            <div class="p-2">
+                <h1 class="text-3xl text-yellow-500">Upcoming: 20</h1>
+                <h1 class="text-3xl text-red-500">On-Going: 20</h1>
+                <h1 class="text-3xl text-green-500">Finished: 10</h1>
+                <h1 class="text-3xl font-bold text-center mt-8 text-blue-500">Total: 30/50</h1>
             </div>
         </div>
 

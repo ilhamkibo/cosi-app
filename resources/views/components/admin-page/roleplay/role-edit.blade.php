@@ -2,7 +2,7 @@
 
     <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 mb-4">
         <div class="max-w-4xl mx-auto bg-white p-6 xl:my-2 rounded shadow">
-            <h1 class="text-2xl font-bold mb-4">Add New Role</h1>
+            <h1 class="text-2xl font-bold mb-4">Edit role {{ $role->name }}</h1>
             <form action="{{ route('admin.roles.update', $role->id) }}" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
